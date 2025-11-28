@@ -1,0 +1,1103 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YIJIN AUTO BODY PARTS - Pembekal Alat Ganti Kereta Profesional di Pulau Pinang, Malaysia</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <style>
+        /* 基础样式 */
+        :root {
+            --primary: #2c3e50;
+            --secondary: #e74c3c;
+            --accent: #3498db;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+            --text: #333;
+            --shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            line-height: 1.6;
+            color: var(--text);
+            background-color: #f9f9f9;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+        
+        section {
+            padding: 80px 0;
+        }
+        
+        h1, h2, h3, h4 {
+            margin-bottom: 20px;
+            color: var(--dark);
+            font-weight: 700;
+        }
+        
+        h1 {
+            font-size: 3rem;
+            line-height: 1.2;
+        }
+        
+        h2 {
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 50px;
+            position: relative;
+        }
+        
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background-color: var(--secondary);
+        }
+        
+        h3 {
+            font-size: 1.8rem;
+            color: var(--primary);
+        }
+        
+        p {
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+        
+        .text-center {
+            text-align: center;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background-color: var(--secondary);
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .btn:hover {
+            background-color: #c0392b;
+            transform: translateY(-3px);
+            box-shadow: var(--shadow);
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            border: 2px solid var(--secondary);
+            color: var(--secondary);
+        }
+        
+        .btn-outline:hover {
+            background-color: var(--secondary);
+            color: white;
+        }
+        
+        .btn-whatsapp {
+            background-color: #25D366;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .btn-whatsapp:hover {
+            background-color: #128C7E;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        
+        /* 导航栏 */
+        header {
+            background-color: white;
+            box-shadow: var(--shadow);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo i {
+            color: var(--secondary);
+            margin-right: 10px;
+            font-size: 28px;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin-left: 30px;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: color 0.3s;
+            font-size: 1.1rem;
+        }
+        
+        .nav-links a:hover {
+            color: var(--secondary);
+        }
+        
+        .menu-toggle {
+            display: none;
+            font-size: 24px;
+            cursor: pointer;
+        }
+        
+        /* 主页区域 */
+        #home {
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1593941707882-a5bba5338fe2?ixlib=rb-4.0.3&auto=format&fit=crop&w=1950&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            text-align: center;
+            padding: 200px 0 100px;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+        }
+        
+        #home h1 {
+            color: white;
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+        }
+        
+        #home p {
+            font-size: 1.3rem;
+            max-width: 700px;
+            margin: 0 auto 30px;
+        }
+        
+        .hero-btns {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+        
+        /* 关于我们部分 */
+        .about-content {
+            display: flex;
+            align-items: center;
+            gap: 50px;
+        }
+        
+        .about-text {
+            flex: 1;
+        }
+        
+        .about-image {
+            flex: 1;
+            text-align: center;
+        }
+        
+        .about-image img {
+            max-width: 100%;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+        }
+        
+        /* 服务部分 */
+        #services {
+            background-color: var(--light);
+        }
+        
+        .services-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        
+        .service-card {
+            background-color: white;
+            padding: 40px 30px;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            text-align: center;
+            transition: transform 0.3s;
+        }
+        
+        .service-card:hover {
+            transform: translateY(-10px);
+        }
+        
+        .service-card i {
+            font-size: 50px;
+            color: var(--accent);
+            margin-bottom: 20px;
+        }
+        
+        /* 产品部分 */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+        
+        .product-card {
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-10px);
+        }
+        
+        .product-img {
+            height: 200px;
+            background-color: #ddd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #777;
+        }
+        
+        .product-info {
+            padding: 20px;
+        }
+        
+        /* 公司优势 */
+        #advantages {
+            background-color: var(--light);
+        }
+        
+        .advantages-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        
+        .advantage-card {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+        }
+        
+        .advantage-icon {
+            font-size: 40px;
+            color: var(--secondary);
+            flex-shrink: 0;
+        }
+        
+        /* 客户评价 */
+        #testimonials {
+            background-color: var(--light);
+        }
+        
+        .testimonials-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        
+        .testimonial-card {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            position: relative;
+        }
+        
+        .testimonial-card::before {
+            content: """;
+            font-size: 80px;
+            color: var(--light);
+            position: absolute;
+            top: -10px;
+            left: 10px;
+            font-family: Georgia, serif;
+        }
+        
+        .testimonial-text {
+            font-style: italic;
+            margin-bottom: 20px;
+        }
+        
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .author-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: #ddd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* 联系方式 */
+        .contact-container {
+            display: flex;
+            gap: 50px;
+        }
+        
+        .contact-info, .contact-form {
+            flex: 1;
+        }
+        
+        .contact-details {
+            margin-bottom: 30px;
+        }
+        
+        .contact-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+        
+        .contact-item i {
+            font-size: 24px;
+            color: var(--accent);
+            margin-right: 15px;
+            margin-top: 5px;
+        }
+        
+        .contact-form form {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+        
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+        
+        .form-group textarea {
+            height: 150px;
+            resize: vertical;
+        }
+        
+        /* 地图 */
+        #map {
+            height: 400px;
+            margin-top: 50px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+        
+        /* WhatsApp浮动按钮 */
+        .whatsapp-float {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background-color: #25D366;
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            transition: all 0.3s ease;
+            animation: pulse 2s infinite;
+        }
+        
+        .whatsapp-float:hover {
+            transform: scale(1.1);
+            background-color: #128C7E;
+        }
+        
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7);
+            }
+            70% {
+                box-shadow: 0 0 0 15px rgba(37, 211, 102, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(37, 211, 102, 0);
+            }
+        }
+        
+        /* 页脚 */
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 50px 0 20px;
+        }
+        
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+        }
+        
+        .footer-column {
+            flex: 1;
+            margin-right: 30px;
+        }
+        
+        .footer-column:last-child {
+            margin-right: 0;
+        }
+        
+        .footer-column h3 {
+            color: white;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+        
+        .footer-links a {
+            color: #ddd;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-links a:hover {
+            color: var(--accent);
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .social-links a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            color: white;
+            transition: all 0.3s;
+        }
+        
+        .social-links a:hover {
+            background-color: var(--accent);
+            transform: translateY(-3px);
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.9rem;
+            color: #aaa;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 992px) {
+            .about-content {
+                flex-direction: column;
+            }
+            
+            .contact-container {
+                flex-direction: column;
+            }
+            
+            .footer-content {
+                flex-direction: column;
+            }
+            
+            .footer-column {
+                margin-right: 0;
+                margin-bottom: 30px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: block;
+            }
+            
+            .nav-links {
+                position: fixed;
+                top: 80px;
+                left: -100%;
+                width: 100%;
+                background-color: white;
+                flex-direction: column;
+                align-items: center;
+                padding: 20px 0;
+                transition: left 0.3s ease;
+                box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+            }
+            
+            .nav-links.active {
+                left: 0;
+            }
+            
+            .nav-links li {
+                margin: 15px 0;
+            }
+            
+            #home h1 {
+                font-size: 2.5rem;
+            }
+            
+            .hero-btns {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            h2 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- WhatsApp浮动按钮 -->
+    <a href="https://wa.me/60164161638" class="whatsapp-float" target="_blank">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <!-- 导航栏 -->
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">
+                    <i class="fas fa-car"></i>
+                    <span>YIJIN AUTO BODY PARTS</span>
+                </div>
+                <div class="menu-toggle" id="menuToggle">
+                    <i class="fas fa-bars"></i>
+                </div>
+                <ul class="nav-links" id="navLinks">
+                    <li><a href="#home">Laman Utama</a></li>
+                    <li><a href="#about">Tentang Kami</a></li>
+                    <li><a href="#services">Perkhidmatan Kami</a></li>
+                    <li><a href="#products">Julat Produk</a></li>
+                    <li><a href="#advantages">Kelebihan Syarikat</a></li>
+                    <li><a href="#testimonials">Ulasan Pelanggan</a></li>
+                    <li><a href="#contact">Hubungi Kami</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- 主页 -->
+    <section id="home">
+        <div class="container">
+            <h1>Pembekal Alat Ganti Badan Kereta Profesional</h1>
+            <p>YIJIN AUTO BODY PARTS TRADING - Pembekal alat ganti kereta terkemuka di Pulau Pinang, Malaysia yang menyediakan alat ganti OEM dan berkualiti tinggi</p>
+            <div class="hero-btns">
+                <a href="#products" class="btn">Lihat Produk</a>
+                <a href="#contact" class="btn btn-outline">Hubungi Kami</a>
+                <a href="https://wa.me/60164161638" class="btn btn-whatsapp" target="_blank">
+                    <i class="fab fa-whatsapp"></i> WhatsApp Kami
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 关于我们 -->
+    <section id="about">
+        <div class="container">
+            <h2>Tentang Kami</h2>
+            <div class="about-content">
+                <div class="about-text">
+                    <h3>YIJIN AUTO BODY PARTS TRADING</h3>
+                    <p>Ditubuhkan pada tahun 2005, kami adalah syarikat perdagangan alat ganti badan kereta profesional yang beroperasi di Pulau Pinang, Malaysia. Selama bertahun-tahun, kami telah berdedikasi untuk menyediakan alat ganti kereta berkualiti tinggi kepada bengkel kereta, peniaga dan pemilik kenderaan persendirian.</p>
+                    <p>Julat produk kami merangkumi pelbagai alat ganti badan kereta untuk pelbagai jenama dan model kereta, termasuk bumper, pintu, fender, bonet, lampu dan banyak lagi. Kami telah menjalinkan kerjasama jangka panjang dengan banyak pengeluar terkenal dalam dan luar negara untuk memastikan kami menyediakan produk yang paling berkualiti kepada pelanggan.</p>
+                    <p>Pasukan kami terdiri daripada profesional yang berpengalaman yang mempunyai pemahaman mendalam tentang industri automotif dan mampu memberikan nasihat profesional dan penyelesaian kepada pelanggan.</p>
+                    <div class="hero-btns">
+                        <a href="#contact" class="btn">Ketahui Lebih Lanjut</a>
+                        <a href="https://wa.me/6012416988010" class="btn btn-whatsapp" target="_blank">
+                            <i class="fab fa-whatsapp"></i> Hubungi Jualan
+                        </a>
+                    </div>
+                </div>
+                <div class="about-image">
+                    <div style="width: 100%; height: 400px; background-color: #e0e0e0; border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                        <p>Gambar Syarikat</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 服务 -->
+    <section id="services">
+        <div class="container">
+            <h2>Perkhidmatan Kami</h2>
+            <div class="services-container">
+                <div class="service-card">
+                    <i class="fas fa-cogs"></i>
+                    <h3>Bekalan Alat Ganti</h3>
+                    <p>Menyediakan alat ganti badan kereta OEM dan berkualiti tinggi untuk pelbagai jenama dan model kereta, memastikan kenderaan anda sentiasa dalam keadaan terbaik.</p>
+                </div>
+                <div class="service-card">
+                    <i class="fas fa-tools"></i>
+                    <h3>Perundingan Teknikal</h3>
+                    <p>Pasukan profesional kami menyediakan sokongan teknikal dan cadangan pemilihan alat ganti untuk membantu anda mencari penyelesaian yang paling sesuai.</p>
+                </div>
+                <div class="service-card">
+                    <i class="fas fa-shipping-fast"></i>
+                    <h3>Penghantaran Pantas</h3>
+                    <p>Kami menyediakan perkhidmatan penghantaran pantas di sekitar Pulau Pinang dan kawasan sekitarnya, memastikan anda menerima alat ganti yang diperlukan dengan segera.</p>
+                </div>
+                <div class="service-card">
+                    <i class="fas fa-search"></i>
+                    <h3>Perkhidmatan Mencari Alat Ganti</h3>
+                    <p>Jika anda memerlukan alat ganti tertentu atau sukar dicari, kami boleh membantu mencarinya dan menyediakan penyelesaian terbaik.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 产品 -->
+    <section id="products">
+        <div class="container">
+            <h2>Julat Produk</h2>
+            <div class="products-grid">
+                <div class="product-card">
+                    <div class="product-img">
+                        Gambar Bumper
+                    </div>
+                    <div class="product-info">
+                        <h3>Siri Bumper</h3>
+                        <p>Bumper depan, bumper belakang dan aksesori berkaitan untuk pelbagai jenama dan model kereta.</p>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="product-img">
+                        Gambar Pintu
+                    </div>
+                    <div class="product-info">
+                        <h3>Pintu Kereta</h3>
+                        <p>Pintu depan, pintu belakang, cangkerang pintu, mekanisme kunci pintu dan pengatur cermin tingkap.</p>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="product-img">
+                        Gambar Lampu
+                    </div>
+                    <div class="product-info">
+                        <h3>Sistem Pencahayaan</h3>
+                        <p>Lampu depan, lampu belakang, lampu kabus, lampu isyarat dan komponen pencahayaan lain.</p>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="product-img">
+                        Gambar Fender
+                    </div>
+                    <div class="product-info">
+                        <h3>Panel Badan</h3>
+                        <p>Fender, bonet, penutup bagasi, skirt sisi dan panel luaran badan kereta lain.</p>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="product-img">
+                        Gambar Cermin
+                    </div>
+                    <div class="product-info">
+                        <h3>Siri Cermin</h3>
+                        <p>Cermin pandang belakang dalam dan luar, cermin pelaras elektrik dan aksesori berkaitan.</p>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="product-img">
+                        Gambar Gril
+                    </div>
+                    <div class="product-info">
+                        <h3>Gril dan Hiasan Depan</h3>
+                        <p>Gril depan, jalur hiasan, logo dan komponen penampilan lain.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 公司优势 -->
+    <section id="advantages">
+        <div class="container">
+            <h2>Kelebihan Syarikat</h2>
+            <div class="advantages-container">
+                <div class="advantage-card">
+                    <div class="advantage-icon">
+                        <i class="fas fa-award"></i>
+                    </div>
+                    <div>
+                        <h3>Jaminan Kualiti</h3>
+                        <p>Kami hanya membekalkan alat ganti yang telah melalui pemeriksaan kualiti yang ketat, memastikan ia mematuhi atau melebihi piawaian industri. Semua produk diuji secara profesional untuk memastikan ketahanan dan keserasian.</p>
+                    </div>
+                </div>
+                <div class="advantage-card">
+                    <div class="advantage-icon">
+                        <i class="fas fa-handshake"></i>
+                    </div>
+                    <div>
+                        <h3>Rakan Kongsi yang Boleh Dipercayai</h3>
+                        <p>Menjalin kerjasama jangka panjang dengan pengeluar terkenal dalam dan luar negara untuk memastikan bekalan stabil dan harga yang kompetitif. Kami bekerjasama rapat dengan pembekal untuk memastikan sumber yang stabil.</p>
+                    </div>
+                </div>
+                <div class="advantage-card">
+                    <div class="advantage-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div>
+                        <h3>Pasukan Profesional</h3>
+                        <p>Kami mempunyai pasukan yang berpengalaman yang mampu memberikan nasihat profesional dan penyelesaian tersuai. Teknisis kami mempunyai pemahaman mendalam tentang pelbagai model kereta.</p>
+                    </div>
+                </div>
+                <div class="advantage-card">
+                    <div class="advantage-icon">
+                        <i class="fas fa-shipping-fast"></i>
+                    </div>
+                    <div>
+                        <h3>Penghantaran Pantas</h3>
+                        <p>Kami menyediakan perkhidmatan penghantaran pantas di sekitar Pulau Pinang dan kawasan sekitarnya. Kebanyakan pesanan boleh dihantar dalam masa 24 jam, memastikan anda menerima alat ganti yang diperlukan dengan segera.</p>
+                    </div>
+                </div>
+                <div class="advantage-card">
+                    <div class="advantage-icon">
+                        <i class="fas fa-headset"></i>
+                    </div>
+                    <div>
+                        <h3>Perkhidmatan Pelanggan yang Baik</h3>
+                        <p>Kami menyediakan sokongan pelanggan sepanjang masa melalui telefon, WhatsApp dan e-mel untuk menjawab soalan anda dan memberikan sokongan teknikal.</p>
+                    </div>
+                </div>
+                <div class="advantage-card">
+                    <div class="advantage-icon">
+                        <i class="fas fa-tag"></i>
+                    </div>
+                    <div>
+                        <h3>Harga Berpatutan</h3>
+                        <p>Kami menawarkan harga yang kompetitif untuk memastikan anda mendapat nilai terbaik. Diskaun tambahan tersedia untuk pembelian pukal.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 客户评价 -->
+    <section id="testimonials">
+        <div class="container">
+            <h2>Ulasan Pelanggan</h2>
+            <div class="testimonials-container">
+                <div class="testimonial-card">
+                    <div class="testimonial-text">
+                        "Alat ganti yang dibekalkan oleh YIJIN AUTO sangat berkualiti dengan harga yang berpatutan. Penghantaran mereka juga pantas, membantu saya menyelesaikan keperluan pembaikan segera."
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div>
+                            <h4>Encik Lim</h4>
+                            <p>Pemilik Bengkel Kereta</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-text">
+                        "Bekerjasama dengan mereka selama bertahun-tahun, sentiasa menyediakan produk berkualiti tinggi dan perkhidmatan profesional. Saya sangat menghargai pasukan teknikal mereka yang sentiasa memberikan nasihat profesional."
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div>
+                            <h4>Puan Tan</h4>
+                            <p>Peniaga Kereta</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-text">
+                        "Sebagai pemilik kenderaan persendirian, saya menghargai perkhidmatan mesra dan harga berpatutan YIJIN AUTO. Mereka membantu saya mencari alat ganti yang sukar dicari, menyelesaikan masalah besar."
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div>
+                            <h4>Encik Wong</h4>
+                            <p>Pelanggan Persendirian</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 联系方式 -->
+    <section id="contact">
+        <div class="container">
+            <h2>Hubungi Kami</h2>
+            <div class="contact-container">
+                <div class="contact-info">
+                    <h3>Dapatkan Sebut Harga dan Perundingan</h3>
+                    <p>Dialu-alukan untuk menghubungi kami untuk maklumat produk, sebut harga atau sebarang perundingan teknikal. Pasukan kami akan membalas anda dengan segera.</p>
+                    
+                    <div class="contact-details">
+                        <div class="contact-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <div>
+                                <h4>Alamat</h4>
+                                <p>81, Jalan Raja Uda, Pusat Perniagaan Raja Uda, 12300 Butterworth, Pulau Pinang, Malaysia</p>
+                            </div>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-phone"></i>
+                            <div>
+                                <h4>Telefon</h4>
+                                <p>+60 16-416 1638</p>
+                                <p>+60 12-498 8010</p>
+                            </div>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fab fa-whatsapp"></i>
+                            <div>
+                                <h4>WhatsApp</h4>
+                                <p>
+                                    <a href="https://wa.me/60164161638" class="btn btn-whatsapp" style="padding: 8px 15px; font-size: 0.9rem;" target="_blank">
+                                        <i class="fab fa-whatsapp"></i> 016-416 1638
+                                    </a>
+                                </p>
+                                <p>
+                                    <a href="https://wa.me/60124988010" class="btn btn-whatsapp" style="padding: 8px 15px; font-size: 0.9rem;" target="_blank">
+                                        <i class="fab fa-whatsapp"></i> 012-498 8010
+                                    </a>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-clock"></i>
+                            <div>
+                                <h4>Waktu Operasi</h4>
+                                <p>Isnin hingga Jumaat: 9:00 PG - 6:00 PTG</p>
+                                <p>Sabtu: 9:00 PG - 1:00 PTG</p>
+                                <p>Ahad: Tutup</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="contact-form">
+                    <form id="contactForm">
+                        <div class="form-group">
+                            <label for="name">Nama Anda</label>
+                            <input type="text" id="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">E-mel</label>
+                            <input type="email" id="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Nombor Telefon</label>
+                            <input type="tel" id="phone">
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Mesej Anda</label>
+                            <textarea id="message" required></textarea>
+                        </div>
+                        <button type="submit" class="btn">Hantar Mesej</button>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- 地图 -->
+            <div id="map"></div>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>YIJIN AUTO BODY PARTS</h3>
+                    <p>Pembekal alat ganti badan kereta terkemuka di Pulau Pinang, Malaysia yang berdedikasi untuk menyediakan produk berkualiti tinggi dan perkhidmatan profesional kepada pelanggan.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="https://wa.me/60164161638" target="_blank"><i class="fab fa-whatsapp"></i></a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h3>Pautan Pantas</h3>
+                    <ul class="footer-links">
+                        <li><a href="#home">Laman Utama</a></li>
+                        <li><a href="#about">Tentang Kami</a></li>
+                        <li><a href="#services">Perkhidmatan Kami</a></li>
+                        <li><a href="#products">Julat Produk</a></li>
+                        <li><a href="#contact">Hubungi Kami</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Kategori Produk</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Siri Bumper</a></li>
+                        <li><a href="#">Pintu Kereta</a></li>
+                        <li><a href="#">Sistem Pencahayaan</a></li>
+                        <li><a href="#">Panel Badan</a></li>
+                        <li><a href="#">Siri Cermin</a></li>
+                        <li><a href="#">Gril dan Hiasan Depan</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Hubungi Kami</h3>
+                    <ul class="footer-links">
+                        <li><i class="fas fa-map-marker-alt"></i> 81, Jalan Raja Uda, Butterworth</li>
+                        <li><i class="fas fa-phone"></i> +60 16-416 1638</li>
+                        <li><i class="fab fa-whatsapp"></i> +60 12-498 8010</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2023 YIJIN AUTO BODY PARTS TRADING. Hak Cipta Terpelihara.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script>
+        // 移动端菜单切换
+        const menuToggle = document.getElementById('menuToggle');
+        const navLinks = document.getElementById('navLinks');
+        
+        menuToggle.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+        });
+        
+        // 关闭移动端菜单当点击链接
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('active');
+            });
+        });
+        
+        // 导航栏滚动效果
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (window.scrollY > 100) {
+                header.style.padding = '10px 0';
+                header.style.boxShadow = '0 5px 15px rgba(0,0,0,0.1)';
+            } else {
+                header.style.padding = '0';
+                header.style.boxShadow = '0 2px 10px rgba(0,0,0,0.1)';
+            }
+        });
+        
+        // 表单提交
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Terima kasih atas mesej anda! Kami akan menghubungi anda tidak lama lagi.');
+            this.reset();
+        });
+        
+        // 初始化地图
+        function initMap() {
+            // 公司坐标（Butterworth, Penang的近似坐标）
+            const companyLocation = [5.399, 100.375];
+            
+            // 创建地图
+            const map = L.map('map').setView(companyLocation, 15);
+            
+            // 添加地图图层
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);
+            
+            // 添加标记
+            L.marker(companyLocation).addTo(map)
+                .bindPopup('YIJIN AUTO BODY PARTS TRADING<br>81, Jalan Raja Uda, Pusat Perniagaan Raja Uda, 12300 Butterworth, Pulau Pinang')
+                .openPopup();
+        }
+        
+        // 页面加载完成后初始化地图
+        window.addEventListener('DOMContentLoaded', initMap);
+    </script>
+</body>
+</html>
